@@ -28,9 +28,10 @@
 <script>
   const songs = [
   "https://www.youtube.com/embed/brP9Q08kEfk?si=jhaQ-teG4J73zr9m"
-];
+  ];
 
   let used = [];
+  let currentSongIndex = null; // to track the current song
 
   function getNextSong() {
     if (used.length === songs.length) {
@@ -44,14 +45,28 @@
     } while (used.includes(index));
 
     used.push(index);
+    currentSongIndex = index;
+
     const player = document.getElementById("player");
-    player.src = songs[index] + "?autoplay=1";
+    player.src = songs[index] + "&autoplay=1";
     document.getElementById("player-container").style.display = "block";
   }
 
   function togglePlayer() {
     const container = document.getElementById("player-container");
-    container.style.display = container.style.display === "none" ? "block" : "none";
+    const player = document.getElementById("player");
+
+    if (container.style.display === "none" || container.style.display === "") {
+      container.style.display = "block";
+
+      if (currentSongIndex !== null) {
+        // reload last played song with autoplay
+        player.src = songs[currentSongIndex] + "&autoplay=1";
+      }
+    } else {
+      container.style.display = "none";
+      player.src = "";  // unload iframe to stop music
+    }
   }
 </script>
 
