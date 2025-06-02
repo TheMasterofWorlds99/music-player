@@ -1,73 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Undertale Music Player</title>
-  <style>
-    #player-container {
-      display: none;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px;
-      font-size: 16px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Undertale Music Player</title>
 </head>
 <body>
 
-<h2>🎵 Undertale Random Music Player</h2>
-<button onclick="togglePlayer()">Toggle Player</button>
-<button onclick="getNextSong()">Play Random Song</button>
-
-<div id="player-container">
-  <iframe id="player" width="560" height="315" frameborder="0"
-    allow="autoplay; encrypted-media" allowfullscreen>
-  </iframe>
-</div>
+<audio id="audioPlayer" controls></audio>
+<br/>
+<button onclick="toggleAudio()">Play/Pause</button>
+<button onclick="playNext()">Next Song</button>
 
 <script>
-  const songs = [
-  "https://www.youtube.com/embed/brP9Q08kEfk?si=jhaQ-teG4J73zr9m"
-  ];
+const songs = [
+  "path/to/MenuFull.mp3",
+  "path/to/Megalovania.mp3",
+  "path/to/HisTheme.mp3",
+  "path/to/SnowdinTown.mp3"
+];
 
-  let used = [];
-  let currentSongIndex = null; // to track the current song
+let used = [];
+let currentSongIndex = null;
+const audioPlayer = document.getElementById("audioPlayer");
 
-  function getNextSong() {
-    if (used.length === songs.length) {
-      alert("All songs have been played!");
-      return;
-    }
-
-    let index;
-    do {
-      index = Math.floor(Math.random() * songs.length);
-    } while (used.includes(index));
-
-    used.push(index);
-    currentSongIndex = index;
-
-    const player = document.getElementById("player");
-    player.src = songs[index] + "&autoplay=1";
-    document.getElementById("player-container").style.display = "block";
+function getNextSongIndex() {
+  if (used.length === songs.length) {
+    alert("All songs played!");
+    return null;
   }
+  let index;
+  do {
+    index = Math.floor(Math.random() * songs.length);
+  } while (used.includes(index));
+  used.push(index);
+  return index;
+}
 
-  function togglePlayer() {
-    const container = document.getElementById("player-container");
-    const player = document.getElementById("player");
+function playNext() {
+  const nextIndex = getNextSongIndex();
+  if (nextIndex !== null) {
+    currentSongIndex = nextIndex;
+    audioPlayer.src = songs[nextIndex];
+    audioPlayer.play();
+  }
+}
 
-    if (container.style.display === "none" || container.style.display === "") {
-      container.style.display = "block";
-
-      if (currentSongIndex !== null) {
-        // reload last played song with autoplay
-        player.src = songs[currentSongIndex] + "&autoplay=1";
-      }
+function toggleAudio() {
+  if (audioPlayer.paused) {
+    if (!audioPlayer.src && currentSongIndex === null) {
+      playNext();  // start from first random song
     } else {
-      container.style.display = "none";
-      player.src = "";  // unload iframe to stop music
+      audioPlayer.play();
     }
+  } else {
+    audioPlayer.pause();
   }
+}
+
+// Optional: autoplay next song after current ends
+audioPlayer.addEventListener("ended", () => {
+  playNext();
+});
 </script>
 
 </body>
