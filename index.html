@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Undertale Music Player</title>
+  <style>
+    #player-container {
+      display: none;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🎵 Undertale Random Music Player</h2>
+<button onclick="togglePlayer()">Toggle Player</button>
+<button onclick="getNextSong()">Play Random Song</button>
+
+<div id="player-container">
+  <iframe id="player" width="560" height="315" frameborder="0"
+    allow="autoplay; encrypted-media" allowfullscreen>
+  </iframe>
+</div>
+
+<script>
+  const songs = [
+    "https://www.youtube.com/embed/YwFhPQ9eLf4", // Menu (Full)
+    "https://www.youtube.com/embed/ZcoqR9Bwx1Y", // Megalovania
+    "https://www.youtube.com/embed/q9Z1W1b9KpI", // His Theme
+    "https://www.youtube.com/embed/3HAGxYVk0MU"  // Snowdin Town
+    // Add more links here
+  ];
+
+  let used = [];
+
+  function getNextSong() {
+    if (used.length === songs.length) {
+      alert("All songs have been played!");
+      return;
+    }
+
+    let index;
+    do {
+      index = Math.floor(Math.random() * songs.length);
+    } while (used.includes(index));
+
+    used.push(index);
+    const player = document.getElementById("player");
+    player.src = songs[index] + "?autoplay=1";
+    document.getElementById("player-container").style.display = "block";
+  }
+
+  function togglePlayer() {
+    const container = document.getElementById("player-container");
+    container.style.display = container.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+</body>
+</html>
