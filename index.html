@@ -1,64 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>Undertale Music Player</title>
+  <style>
+    .floating-music-widget {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    }
+  </style>
 </head>
 <body>
-
-<audio id="audioPlayer" controls></audio>
-<br/>
-<button onclick="toggleAudio()">Play/Pause</button>
-<button onclick="playNext()">Next Song</button>
-
-<script>
-const songs = [
-  "Undertale OST - 093 Menu (Full).mp3"
-];
-
-let used = [];
-let currentSongIndex = null;
-const audioPlayer = document.getElementById("audioPlayer");
-
-function getNextSongIndex() {
-  if (used.length === songs.length) {
-    alert("All songs played!");
-    return null;
-  }
-  let index;
-  do {
-    index = Math.floor(Math.random() * songs.length);
-  } while (used.includes(index));
-  used.push(index);
-  return index;
-}
-
-function playNext() {
-  const nextIndex = getNextSongIndex();
-  if (nextIndex !== null) {
-    currentSongIndex = nextIndex;
-    audioPlayer.src = songs[nextIndex];
-    audioPlayer.play();
-  }
-}
-
-function toggleAudio() {
-  if (audioPlayer.paused) {
-    if (!audioPlayer.src && currentSongIndex === null) {
-      playNext();  // start from first random song
-    } else {
-      audioPlayer.play();
-    }
-  } else {
-    audioPlayer.pause();
-  }
-}
-
-// Optional: autoplay next song after current ends
-audioPlayer.addEventListener("ended", () => {
-  playNext();
-});
-</script>
-
+  <div class="floating-music-widget">
+    <script src="https://static.elfsight.com/platform/platform.js" async></script>
+    <div class="elfsight-app-03fe6149-2d5d-4b5e-ac35-6d2d26973f12" data-elfsight-app-lazy></div>
+  </div>
 </body>
 </html>
